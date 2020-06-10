@@ -70,7 +70,7 @@ const mergeUint8Arrays = (arrays) => {
     return r
 }
 
-const downloadChunk = async (hash) => {
+const downloadData = async (hash) => {
     const chunks = await downloadChunks(hash)
     const buffers = chunks.map(chunk => chunk.data)
     return mergeUint8Arrays(buffers)
@@ -79,7 +79,7 @@ const downloadChunk = async (hash) => {
 const testUploadAndDownload = async () => {
     const data = new Uint8Array(4096 * 8 + 1)
     const hash = await uploadData(data)
-    const buffers = await downloadChunk(hash)
+    const buffers = await downloadData(hash)
     console.log(buffers)
 }
 
