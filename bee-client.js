@@ -83,4 +83,8 @@ const testUploadAndDownload = async () => {
     console.log(buffers)
 }
 
-testUploadAndDownload()
+module.exports = {
+    uploadData,
+    downloadData,
+}
+// testUploadAndDownload()
