@@ -176,7 +176,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/bzz-tag:/', (req, res) => {
-    console.log('tag', req.params)
+    console.log('tag', req.params, req.query)
     res.status(200).send('0')
 })
 
