@@ -11,7 +11,7 @@ const uploadData = async (data) => {
     const chunks = []
     const chunkCallback = (chunk) => chunks.push(chunk)
     const hasher = new swarm.fileHasher(chunkCallback)
-    const hash = toHex(hasher.Hash(data))
+    const hash = hasher.Hash(data)
     for (const chunk of chunks) {
         const reference = toHex(chunk.reference)
         const data = Uint8Array.from([...chunk.span, ...chunk.data])
@@ -86,5 +86,7 @@ const testUploadAndDownload = async () => {
 module.exports = {
     uploadData,
     downloadData,
+    mergeUint8Arrays,
+    toHex,
 }
 // testUploadAndDownload()
