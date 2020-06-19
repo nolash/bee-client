@@ -13,7 +13,7 @@ const LISTEN_PORT = 3001
 const LISTEN_HOST = '127.0.0.1'
 
 const app = express()
-app.use(formidableMiddleware())
+app.use(formidableMiddleware({multiples: true}))
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
@@ -29,18 +29,20 @@ app.all('*', function (req, resp, next) {
 app.post('/bzz:/', async (req, res) => {
     try {
         console.log('bzz upload', req.headers, req.fields, req.files)
-        const fileData = fs.readFileSync(req.files.file.path)
-        const hash = await bee.uploadData(fileData)
-        const c = new collection.Collection()
-        c.add(hash)
-        const serializedCollection = c.serialize()
+        const hashCollection = new collection.Collection()
+        const collectionIndex = new collection.CollectionIndex("manifest")
+        for (const file of req.files.files) {
+            const fileData = fs.readFileSync(file.path)
+            const hash = await bee.uploadData(fileData)
+            const index = hashCollection.add(hash)
+            collectionIndex.add({
+                filename: file.name,
+                mimetype: file.type,
+            }, index);
+        }
+        const serializedCollection = hashCollection.serialize()
         const collectionHash = await bee.uploadData(serializedCollection)
-        const index = new collection.CollectionIndex("manifest")
-        index.add({
-            filename: req.files.file.name,
-            mimetype: req.files.file.type,
-        }, 0);
-        const serializedIndex = index.serialize()
+        const serializedIndex = collectionIndex.serialize()
         const indexHash = await bee.uploadData(serializedIndex)
         const manifest = new collection.Collection()
         manifest.add(collectionHash)

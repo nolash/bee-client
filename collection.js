@@ -29,11 +29,12 @@ function Collection() {
 }
 
 Collection.prototype.add = function(hash) {
+	let new_index = this.hashes.length;
 	if (!isSwarmHash(hash)) {
 		return false;
 	}
 	this.hashes.push(hash);
-	return true;
+	return new_index;
 };
 
 Collection.prototype.serialize = function() {
