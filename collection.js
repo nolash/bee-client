@@ -143,9 +143,64 @@ SimpleManifestAdapter.prototype.getReference = function(k) {
 	let index_position = this.index.keys[k];
 	let collection_position = this.index.values[index_position];
 	return this.collection.hashes[collection_position];
-}
+};
 
 SimpleManifestAdapter.prototype.getMimetype = function(k) {
 	let index_position = this.index.keys[k];
 	return this.index.intermediate[index_position];
-}
+};
+
+SimpleManifestAdapter.prototype.list = function(path) {
+	let entries = [];
+	let keys = [];
+	let fullkeys = [];
+	let dirs = [];
+
+	// surely there is a lean library that does this
+	let clean_path = path
+	if (clean_path[0] == '/') {
+		clean_path = clean_path.substring(1);
+	}
+	if (clean_path.lastIndexOf('/') != clean_path.length-1) {
+		clean_path += '/';
+	}
+	let i = 0;
+	for (const k in this.index.keys) {
+		if (k.startsWith(clean_path)) {
+			let sub_path = k.substring(clean_path.length);
+			let slash_index = sub_path.indexOf('/');
+			let sub_dir_path = sub_path.substring(0, slash_index);
+			if (keys.includes(sub_dir_path)) {
+				continue;
+			}
+			if (slash_index != -1) {
+				keys.push(sub_dir_path);
+				dirs.push(true);
+			} else {
+				keys.push(sub_path);
+				dirs.push(false);
+			}
+			fullkeys.push(k);
+			entries.push(i);
+		}
+		i++;
+	}
+
+	let data = [];
+	for (const e in entries) {
+		let k = keys[e];
+		let mimetype = undefined;
+		let hash = undefined;
+		if (!dirs[e]) {
+			mimetype = this.index.intermediate[e];
+			hash = this.getReference(fullkeys[e]);
+		}
+		let item = {
+			filename: k,
+			mimetype: mimetype,
+			hash: hash,
+		}
+		data.push(item);
+	}
+	return data;
+};

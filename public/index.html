@@ -1068,7 +1068,7 @@ document.addEventListener('DOMContentLoaded', function(){
 					</div>
 					<form id="uploadForm" enctype="multipart/form-data" spellcheck="false">
 						<input type="text" id="uploadSelectedFile" name="uploadSelected" placeholder="select file or directory..."/>
-						<input type="file" id="uploadSelectFile" name="file" multiple webkitdirectory />
+						<input type="file" id="uploadSelectFile" name="file" />
 
 						<button title="Upload a file to Swarm." type="submit" value="Upload File" class="orangeButton wideButton" onclick="if(document.querySelector('#uploadSelectFile').value === '')document.querySelector('#uploadSelectFile').click();" >
 							Upload

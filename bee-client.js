@@ -86,6 +86,7 @@ const testUploadAndDownload = async () => {
 module.exports = {
     uploadData,
     downloadData,
+    downloadChunkData,
     mergeUint8Arrays,
     toHex,
 }
