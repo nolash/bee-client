@@ -44,6 +44,8 @@ app.post('/bzz:/', async (req, res) => {
             for (const file of req.files.files) {
                 await addFile(file, hashCollection, indexCollection)
             }
+        } else if (typeof req.files.files === 'object') {
+            await addFile(req.files.files, hashCollection, indexCollection)
         } else {
             await addFile(req.files.file, hashCollection, indexCollection)
         }
