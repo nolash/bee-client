@@ -3,7 +3,7 @@ const swarm = require('swarm-lowlevel')
 
 const join = require('./asyncJoiner')
 
-const chunkDataEndpoint = 'http://localhost:8080/bzz-chunk'
+const chunkDataEndpoint = 'http://localhost:8080/chunks'
 
 const toHex = byteArray => Array.from(byteArray, (byte) => ('0' + (byte & 0xFF).toString(16)).slice(-2)).join('')
 
