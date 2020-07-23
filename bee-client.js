@@ -87,6 +87,7 @@ module.exports = {
     uploadData,
     downloadData,
     downloadChunkData,
+    uploadChunkData,
     mergeUint8Arrays,
     toHex,
 }
